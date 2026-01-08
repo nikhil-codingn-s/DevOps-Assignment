@@ -123,3 +123,23 @@ NEXT_PUBLIC_API_URL=https://your-new-backend-url.com
 
 - `GET /api/message`: Get the integration message
   - Returns: `{"message": "You've successfully integrated the backend!"}`
+# DevOps Assignment – FastAPI & Next.js
+
+## Overview
+This project is a two-tier web application consisting of:
+- FastAPI backend
+- Next.js frontend
+
+The application will be containerized using Docker, deployed using Terraform,
+and automated via CI/CD pipelines across multiple cloud platforms.
+
+## Tech Stack
+- Backend: FastAPI (Python)
+- Frontend: Next.js
+- Containerization: Docker
+- Infrastructure: Terraform
+- CI/CD: GitHub Actions
+- Cloud: AWS & GCP
+
+## Status
+Project initialized. Development in progress.
