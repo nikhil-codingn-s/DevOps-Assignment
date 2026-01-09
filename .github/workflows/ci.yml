@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   backend-tests:
@@ -12,25 +12,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install backend dependencies
+        working-directory: backend
         run: |
-          cd backend
           python -m venv venv
           source venv/bin/activate
-          pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run backend tests
+        working-directory: backend
         run: |
-          cd backend
           source venv/bin/activate
           pytest
 
@@ -40,35 +38,35 @@ jobs:
     needs: backend-tests
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm ci
+        working-directory: frontend
+        run: npm ci
 
-      - name: Install Playwright browsers
-        run: |
-          cd frontend
-          npx playwright install --with-deps
+      - name: Install Playwright
+        working-directory: frontend
+        run: npx playwright install --with-deps
 
       - name: Start backend
+        working-directory: backend
         run: |
-          cd backend
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          nohup uvicorn app.main:app --port 8000 &
 
-      - name: Run frontend E2E tests
+      - name: Start frontend
+        working-directory: frontend
         run: |
-          cd frontend
-          npm run dev &
-          sleep 10
-          npx playwright test
+          nohup npm run dev &
+
+      - name: Run Playwright tests
+        working-directory: frontend
+        run: npx playwright test
+
